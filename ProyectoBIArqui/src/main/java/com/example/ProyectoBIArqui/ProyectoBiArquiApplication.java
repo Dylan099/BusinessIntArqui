@@ -1,0 +1,16 @@
+package com.example.ProyectoBIArqui;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.context.annotation.Configuration;
+
+@SpringBootApplication
+public class ProyectoBiArquiApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ProyectoBiArquiApplication.class, args);
+	}
+
+}

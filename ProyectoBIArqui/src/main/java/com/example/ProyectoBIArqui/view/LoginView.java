@@ -1,4 +1,4 @@
-package com.example.vaadinViews.view;
+package com.example.ProyectoBIArqui.view;
 
 
 import com.vaadin.flow.component.Text;
@@ -13,7 +13,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
 
-@Route("login")
+@Route("logiin")
 @Theme(value = Material.class)
 public class LoginView extends VerticalLayout {
 

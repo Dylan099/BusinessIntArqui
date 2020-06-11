@@ -1,21 +1,17 @@
-package com.example.vaadinViews.view;
+package com.example.ProyectoBIArqui.view;
 
-import com.example.vaadinViews.dto.DashboardDto;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.charts.Chart;
-import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;

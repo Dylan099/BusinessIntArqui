@@ -1,6 +1,6 @@
-package com.example.vaadinViews.view;
+package com.example.ProyectoBIArqui.view;
 
-import com.example.vaadinViews.dto.GraphicDto;
+import com.example.ProyectoBIArqui.dto.GraphicDto;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;

@@ -1,8 +1,8 @@
-package com.example.vaadinViews.view;
+package com.example.ProyectoBIArqui.view;
 
 
-import com.example.vaadinViews.dto.DashboardDto;
-import com.example.vaadinViews.dto.ReportDto;
+import com.example.ProyectoBIArqui.dto.DashboardDto;
+import com.example.ProyectoBIArqui.dto.ReportDto;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
@@ -111,7 +111,7 @@ public class ReportsView extends VerticalLayout {
         {
             int IdReport = i;
             java.util.Date utilDate = new java.util.Date();
-            Date date = new java.sql.Date(utilDate.getTime());
+            Date date = new Date(utilDate.getTime());
             int IdDashboard = i;
             ReportDto temp = new ReportDto(IdReport,date,IdDashboard);
             reportDtoList.add(temp);

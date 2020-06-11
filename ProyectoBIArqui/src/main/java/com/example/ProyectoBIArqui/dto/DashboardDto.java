@@ -1,4 +1,4 @@
-package com.example.vaadinViews.dto;
+package com.example.ProyectoBIArqui.dto;
 
 import java.sql.Date;
 

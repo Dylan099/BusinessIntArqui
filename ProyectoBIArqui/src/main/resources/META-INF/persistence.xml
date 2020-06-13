@@ -13,6 +13,17 @@
     <class>com.example.ProyectoBIArqui.domain.Persona1</class>
     <class>com.example.ProyectoBIArqui.domain.Residencia1</class>
     <class>com.example.ProyectoBIArqui.domain.Pais</class>
+    <class>com.example.ProyectoBIArqui.domain.UserType</class>
+    <class>com.example.ProyectoBIArqui.domain.Graphic</class>
+    <class>com.example.ProyectoBIArqui.domain.Report</class>
+    <class>com.example.ProyectoBIArqui.domain.QueryGraphicType</class>
+    <class>com.example.ProyectoBIArqui.domain.GraphicVariable</class>
+    <class>com.example.ProyectoBIArqui.domain.Dashboard</class>
+    <class>com.example.ProyectoBIArqui.domain.GraphicType</class>
+    <class>com.example.ProyectoBIArqui.domain.GraphicDashboard</class>
+    <class>com.example.ProyectoBIArqui.domain.User</class>
+    <class>com.example.ProyectoBIArqui.domain.GraphicvarGraphictype</class>
+    <class>com.example.ProyectoBIArqui.domain.Query</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/suicidio?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

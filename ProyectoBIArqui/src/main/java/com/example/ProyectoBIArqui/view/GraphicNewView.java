@@ -1,7 +1,12 @@
 package com.example.ProyectoBIArqui.view;
 
+import com.example.ProyectoBIArqui.api.GraphicController;
+import com.example.ProyectoBIArqui.domain.Graphic;
+import com.example.ProyectoBIArqui.domain.Query;
+import com.example.ProyectoBIArqui.dto.GraphicConfig;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.html.Div;
@@ -13,11 +18,18 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Route("graphic/new")
 @Theme(value = Material.class)
 public class GraphicNewView extends VerticalLayout {
-    public GraphicNewView(){
+    GraphicController graphicController;
+
+    @Autowired
+    public GraphicNewView(GraphicController graphicController){
+        this.graphicController =  graphicController;
         MenuBar menuBar = crearMenu();
         add(menuBar);
 
@@ -26,25 +38,43 @@ public class GraphicNewView extends VerticalLayout {
 
         TextArea title = new TextArea("Titulo de la grafica");
 
-        ComboBox query = new ComboBox();
+        ComboBox<String> query = new ComboBox<String>();
         query.setLabel("Querys");
-        query.setItems("Option one", "Option two");
+        List<String> queriesList = this.graphicController.FindAllQueries();
+        query.setItems(queriesList);
         query.setClearButtonVisible(true);
 
-        ComboBox type = new ComboBox();
+        ComboBox<String> type = new ComboBox<String>();
         type.setLabel("Type");
-        type.setItems("Option one", "Option two");
+        List<String> gtList = this.graphicController.FindAllGraphicType();
+        type.setItems(gtList);
         type.setClearButtonVisible(true);
+
+        ComboBox<String > variable = new ComboBox<String>();
+        variable.setLabel("Variable Independiente");
+        List<String> vList = this.graphicController.FindAllVariables();
+        variable.setItems(vList);
+        variable.setClearButtonVisible(true);
 
         TextArea description = new TextArea("Descripcion de la grafica");
 
+        GraphicConfig nuevaGrafica = new GraphicConfig();
         Button save = new Button("Guardar");
         save.addClickListener(e -> {
-            H2 message = new H2();
-            message.add(new Text("Guardar"));
-            add(message);
+            System.out.println("AUXILIO--------------------->---------->"+ query.getValue());
+            nuevaGrafica.setTitulo(title.getValue());
+            nuevaGrafica.setDesc(description.getValue());
+            nuevaGrafica.setGraphicType(type.getValue());
+            nuevaGrafica.setQuery(query.getValue());
+            nuevaGrafica.setVarInd(variable.getValue());
+
+            add(this.graphicController.generarGrafica(nuevaGrafica));
+            //TODO: GUARDAR GRAFICA EN LA BDD
+            /*save.getUI().ifPresent(ui ->
+                    ui.navigate("graphic/waso"));*/
         });
 
+        Chart waso = this.graphicController.generarGrafica(nuevaGrafica);
 
         setHorizontalComponentAlignment(Alignment.CENTER,titleClass);
         setHorizontalComponentAlignment(Alignment.CENTER,title);
@@ -59,8 +89,6 @@ public class GraphicNewView extends VerticalLayout {
         add(type);
         add(description);
         add(save);
-
-
     }
 
 

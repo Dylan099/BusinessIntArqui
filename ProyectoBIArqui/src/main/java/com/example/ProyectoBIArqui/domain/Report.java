@@ -10,10 +10,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -36,7 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Report.findByDate", query = "SELECT r FROM Report r WHERE r.date = :date"),
     @NamedQuery(name = "Report.findByTxHost", query = "SELECT r FROM Report r WHERE r.txHost = :txHost"),
     @NamedQuery(name = "Report.findByTxUser", query = "SELECT r FROM Report r WHERE r.txUser = :txUser"),
-    @NamedQuery(name = "Report.findByTxDate", query = "SELECT r FROM Report r WHERE r.txDate = :txDate")})
+    @NamedQuery(name = "Report.findByTxDate", query = "SELECT r FROM Report r WHERE r.txDate = :txDate"),
+    @NamedQuery(name = "Report.findByIdDashboard", query = "SELECT r FROM Report r WHERE r.idDashboard = :idDashboard")})
 public class Report implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,9 +63,10 @@ public class Report implements Serializable {
     @Column(name = "tx_date")
     @Temporal(TemporalType.DATE)
     private Date txDate;
-    @JoinColumn(name = "id_dashboard", referencedColumnName = "id_dashboard")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Dashboard idDashboard;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "id_dashboard")
+    private int idDashboard;
 
     public Report() {
     }
@@ -76,12 +75,13 @@ public class Report implements Serializable {
         this.idReport = idReport;
     }
 
-    public Report(Integer idReport, Date date, String txHost, String txUser, Date txDate) {
+    public Report(Integer idReport, Date date, String txHost, String txUser, Date txDate, int idDashboard) {
         this.idReport = idReport;
         this.date = date;
         this.txHost = txHost;
         this.txUser = txUser;
         this.txDate = txDate;
+        this.idDashboard = idDashboard;
     }
 
     public Integer getIdReport() {
@@ -124,11 +124,11 @@ public class Report implements Serializable {
         this.txDate = txDate;
     }
 
-    public Dashboard getIdDashboard() {
+    public int getIdDashboard() {
         return idDashboard;
     }
 
-    public void setIdDashboard(Dashboard idDashboard) {
+    public void setIdDashboard(int idDashboard) {
         this.idDashboard = idDashboard;
     }
 

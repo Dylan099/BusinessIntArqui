@@ -77,12 +77,18 @@ public class Graphic implements Serializable {
     private Date txDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idGraphic", fetch = FetchType.LAZY)
     private Collection<GraphicDashboard> graphicDashboardCollection;
-    @JoinColumn(name = "id_query", referencedColumnName = "id_query")
+    @JoinColumn(name = "id_graphic_type", referencedColumnName = "id_graphic_type")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Query idQuery;
-    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
+    private GraphicType idGraphicType;
+    @JoinColumn(name = "id_graphic_variable", referencedColumnName = "id_graphic_variable")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private User idUser;
+    private GraphicVariable idGraphicVariable;
+    @JoinColumn(name = "id_querybi", referencedColumnName = "id_querybi")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Querybi idQuerybi;
+    @JoinColumn(name = "id_userbi", referencedColumnName = "id_userbi")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Userbi idUserbi;
 
     public Graphic() {
     }
@@ -157,20 +163,36 @@ public class Graphic implements Serializable {
         this.graphicDashboardCollection = graphicDashboardCollection;
     }
 
-    public Query getIdQuery() {
-        return idQuery;
+    public GraphicType getIdGraphicType() {
+        return idGraphicType;
     }
 
-    public void setIdQuery(Query idQuery) {
-        this.idQuery = idQuery;
+    public void setIdGraphicType(GraphicType idGraphicType) {
+        this.idGraphicType = idGraphicType;
     }
 
-    public User getIdUser() {
-        return idUser;
+    public GraphicVariable getIdGraphicVariable() {
+        return idGraphicVariable;
     }
 
-    public void setIdUser(User idUser) {
-        this.idUser = idUser;
+    public void setIdGraphicVariable(GraphicVariable idGraphicVariable) {
+        this.idGraphicVariable = idGraphicVariable;
+    }
+
+    public Querybi getIdQuerybi() {
+        return idQuerybi;
+    }
+
+    public void setIdQuerybi(Querybi idQuerybi) {
+        this.idQuerybi = idQuerybi;
+    }
+
+    public Userbi getIdUserbi() {
+        return idUserbi;
+    }
+
+    public void setIdUserbi(Userbi idUserbi) {
+        this.idUserbi = idUserbi;
     }
 
     @Override

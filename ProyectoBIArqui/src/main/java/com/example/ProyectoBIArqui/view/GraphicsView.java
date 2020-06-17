@@ -1,7 +1,18 @@
 package com.example.ProyectoBIArqui.view;
 
+import com.example.ProyectoBIArqui.api.GraphicController;
+import com.example.ProyectoBIArqui.api.GraphicTypeController;
+import com.example.ProyectoBIArqui.api.GraphicVariableController;
+import com.example.ProyectoBIArqui.api.QueryController;
+import com.example.ProyectoBIArqui.bl.QueryBl;
+import com.example.ProyectoBIArqui.domain.Graphic;
+import com.example.ProyectoBIArqui.domain.GraphicType;
+import com.example.ProyectoBIArqui.domain.GraphicVariable;
+import com.example.ProyectoBIArqui.domain.Querybi;
+import com.example.ProyectoBIArqui.dto.GraphicConfig;
 import com.example.ProyectoBIArqui.dto.GraphicDto;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
@@ -11,6 +22,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +31,18 @@ import java.util.List;
 @Theme(value = Material.class)
 
 public class GraphicsView extends VerticalLayout {
-    public GraphicsView(){
+    GraphicController graphicController;
+    QueryController queryController;
+    GraphicTypeController graphicTypeController;
+    GraphicVariableController graphicVariableController;
 
+    @Autowired
+    public GraphicsView(GraphicController graphicController, QueryController queryController,
+    GraphicTypeController graphicTypeController, GraphicVariableController graphicVariableController){
+        this.graphicController = graphicController;
+        this.queryController = queryController;
+        this.graphicTypeController = graphicTypeController;
+        this.graphicVariableController = graphicVariableController;
         MenuBar menuBar = crearMenu();
         add(menuBar);
 
@@ -70,22 +92,25 @@ public class GraphicsView extends VerticalLayout {
         grid.addColumn(GraphicDto::getQuery).setHeader("query");
         grid.addColumn(GraphicDto::getDescription).setHeader("description");
         grid.addItemClickListener(e -> {
-            H2 message = new H2();
-            message.add(e.getItem().toString());
-            add(message);
+            GraphicConfig graphicConfig = new GraphicConfig();
+            graphicConfig.setTitulo(e.getItem().getName());
+            graphicConfig.setDesc(e.getItem().getDescription());
+            graphicConfig.setGraphicType(graphicTypeController.findGraphicType(e.getItem().getIdGraphicType()).getType());
+            graphicConfig.setQuery(queryController.findQuerybibyIdQuery(e.getItem().getIdQuery()).getQuery());
+            graphicConfig.setVarInd(graphicVariableController.findGV(e.getItem().getIdGraphicVariable()).getVariable());
+            Chart chart = this.graphicController.generarGrafica(graphicConfig);
+            add(chart);
         });
-
-        for(int i =0; i<10 ; i++)
-        {
-            int idGraphic = i;
-            String name = "Name";
-            String query = "Query";
-            String type = "Tipo";
-            String description = "description";
-            GraphicDto temp = new GraphicDto(idGraphic,name,query,type,description);
+        //TODO BUSCAR POR USUARIO
+        List<Graphic> graphicList = graphicController.findAllByUserId(1);
+        for (Graphic g:graphicList
+             ) {
+            Querybi query= queryController.findQuerybibyIdQuery(g.getIdQuerybi().getIdQuerybi());
+            GraphicType type = graphicTypeController.findGraphicType(g.getIdGraphicType().getIdGraphicType());
+            GraphicDto temp = new GraphicDto(g.getIdGraphic(),g.getName(),query.getQuery(),type.getType(),g.getDescription()
+            ,g.getIdUserbi().getIdUserbi(),g.getIdQuerybi().getIdQuerybi(),g.getIdGraphicType().getIdGraphicType(),g.getIdGraphicVariable().getIdGraphicVariable());
             graphicDtoList.add(temp);
         }
-
         grid.setItems(graphicDtoList);
         return grid;
     }

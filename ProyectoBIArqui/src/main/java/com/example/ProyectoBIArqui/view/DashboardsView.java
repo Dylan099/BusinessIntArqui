@@ -1,5 +1,11 @@
 package com.example.ProyectoBIArqui.view;
 
+import com.example.ProyectoBIArqui.api.DashboardController;
+import com.example.ProyectoBIArqui.api.GraphicController;
+import com.example.ProyectoBIArqui.api.GraphicDashboardController;
+import com.example.ProyectoBIArqui.domain.Dashboard;
+import com.example.ProyectoBIArqui.domain.Graphic;
+import com.example.ProyectoBIArqui.domain.GraphicDashboard;
 import com.example.ProyectoBIArqui.dto.DashboardDto;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.contextmenu.MenuItem;
@@ -11,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +26,18 @@ import java.util.List;
 @Theme(value = Material.class)
 
 public class DashboardsView extends VerticalLayout {
-    public DashboardsView(){
+
+    GraphicController graphicController;
+    GraphicDashboardController graphicDashboardController;
+    DashboardController dashboardController;
+
+    @Autowired
+    public DashboardsView(GraphicController graphicController,
+            GraphicDashboardController graphicDashboardController,
+            DashboardController dashboardController){
+        this.graphicController = graphicController;
+        this.graphicDashboardController = graphicDashboardController;
+        this.dashboardController = dashboardController;
 
         MenuBar menuBar = crearMenu();
         add(menuBar);
@@ -73,16 +91,16 @@ public class DashboardsView extends VerticalLayout {
             message.add(e.getItem().toString());
             add(message);
         });
-
-        for(int i =0; i<10 ; i++)
-        {
-            int IdDashboard = i;
-            String name = "Name";
-            String description = "description";
-            DashboardDto temp = new DashboardDto(IdDashboard,name,description);
-            dashboardDtoList.add(temp);
+        List<Integer> graphicDashboards = graphicDashboardController.findDashboardForView();
+        List<Dashboard> dashboardList = new ArrayList<>();
+        for (Integer gd: graphicDashboards
+             ) {
+            dashboardList.add(dashboardController.findDashboardByIdDashboard(gd));
         }
-
+        for (Dashboard d:dashboardList
+             ) {
+            dashboardDtoList.add(new DashboardDto(d.getIdDashboard(),d.getName(),d.getDescription()));
+        }
         grid.setItems(dashboardDtoList);
         return grid;
     }

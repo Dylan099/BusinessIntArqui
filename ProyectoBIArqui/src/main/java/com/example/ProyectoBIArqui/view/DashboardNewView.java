@@ -1,5 +1,11 @@
 package com.example.ProyectoBIArqui.view;
 
+import com.example.ProyectoBIArqui.api.DashboardController;
+import com.example.ProyectoBIArqui.api.GraphicController;
+import com.example.ProyectoBIArqui.api.QueryController;
+import com.example.ProyectoBIArqui.domain.Graphic;
+import com.example.ProyectoBIArqui.domain.Querybi;
+import com.example.ProyectoBIArqui.dto.DashboardConfig;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -14,10 +20,23 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 @Route("dashboard/new")
 @Theme(value = Material.class)
 public class DashboardNewView extends VerticalLayout {
-    public DashboardNewView(){
+
+    GraphicController graphicController;
+    QueryController queryController;
+    DashboardController dashboardController;
+
+    public DashboardNewView(GraphicController graphicController, QueryController queryController
+    ,DashboardController dashboardController){
+        this.graphicController = graphicController;
+        this.queryController = queryController;
+        this.dashboardController = dashboardController;
         MenuBar menuBar = crearMenu();
         add(menuBar);
 
@@ -26,17 +45,31 @@ public class DashboardNewView extends VerticalLayout {
 
         TextArea title = new TextArea("Titulo del dashboard");
 
+        //TODO: RECUPERAR GRAFICAS POR USUARIO
+        List<Graphic> graphicList = graphicController.findAllByUserId(1);
         CheckboxGroup<String> checkboxGroupGrapgics = new CheckboxGroup<>();
-        checkboxGroupGrapgics.setItems("Many", "Muchos", "Monta");
-
-
+        String[] graficas = new String[graphicList.size()];
+        for (int i = 0; i < graphicList.size(); i++) {
+            graficas[i] = graphicList.get(i).getName();
+        }
+        checkboxGroupGrapgics.setItems(graficas);
         TextArea description = new TextArea("Descripcion de la grafica");
 
         Button save = new Button("Guardar");
         save.addClickListener(e -> {
-            H2 message = new H2();
-            message.add(new Text("Guardar"));
-            add(message);
+            Set<String> n = checkboxGroupGrapgics.getSelectedItems();
+            List<Graphic> graphics = new ArrayList<>();
+            for (String s:n
+                 ) {
+                graphics.add(graphicController.findGraphicByName(s));
+            }
+            DashboardConfig dashboardConfig = new DashboardConfig();
+            dashboardConfig.setName(title.getValue());
+            dashboardConfig.setDesc(description.getValue());
+            dashboardConfig.setGraphicList(graphics);
+            dashboardController.SaveDashboard(dashboardConfig);
+            save.getUI().ifPresent(ui ->
+                    ui.navigate("dashboards"));
         });
 
 

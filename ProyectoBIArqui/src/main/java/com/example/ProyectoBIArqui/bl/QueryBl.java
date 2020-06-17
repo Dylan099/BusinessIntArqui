@@ -1,7 +1,7 @@
 package com.example.ProyectoBIArqui.bl;
 
 import com.example.ProyectoBIArqui.dao.QueryRepository;
-import com.example.ProyectoBIArqui.domain.Query;
+import com.example.ProyectoBIArqui.domain.Querybi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +19,19 @@ public class QueryBl {
     }
 
     public List<String> findAllQueries(){
-        List<Query> objQueries = queryRepository.findAll();
+        List<Querybi> objQueries = queryRepository.findAll();
         List<String> queries = new ArrayList<>();
-        for (Query q:objQueries
+        for (Querybi q:objQueries
              ) {
             queries.add(q.getQuery());
         }
         return queries;
     }
+
+    public Querybi findQuerybi(int pk)
+    {
+        return queryRepository.findQuerybiByIdQuerybi(pk);
+    }
+
+    public Querybi findQuerybyQuery(String query){return queryRepository.findQuerybiByQuery(query);}
 }

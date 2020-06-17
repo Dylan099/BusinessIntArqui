@@ -68,9 +68,7 @@ public class GraphicType implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date txDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idGraphicType", fetch = FetchType.LAZY)
-    private Collection<QueryGraphicType> queryGraphicTypeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "graphicTypeIdGraphicType", fetch = FetchType.LAZY)
-    private Collection<GraphicvarGraphictype> graphicvarGraphictypeCollection;
+    private Collection<Graphic> graphicCollection;
 
     public GraphicType() {
     }
@@ -128,21 +126,12 @@ public class GraphicType implements Serializable {
     }
 
     @XmlTransient
-    public Collection<QueryGraphicType> getQueryGraphicTypeCollection() {
-        return queryGraphicTypeCollection;
+    public Collection<Graphic> getGraphicCollection() {
+        return graphicCollection;
     }
 
-    public void setQueryGraphicTypeCollection(Collection<QueryGraphicType> queryGraphicTypeCollection) {
-        this.queryGraphicTypeCollection = queryGraphicTypeCollection;
-    }
-
-    @XmlTransient
-    public Collection<GraphicvarGraphictype> getGraphicvarGraphictypeCollection() {
-        return graphicvarGraphictypeCollection;
-    }
-
-    public void setGraphicvarGraphictypeCollection(Collection<GraphicvarGraphictype> graphicvarGraphictypeCollection) {
-        this.graphicvarGraphictypeCollection = graphicvarGraphictypeCollection;
+    public void setGraphicCollection(Collection<Graphic> graphicCollection) {
+        this.graphicCollection = graphicCollection;
     }
 
     @Override

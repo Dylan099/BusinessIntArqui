@@ -1,6 +1,7 @@
 package com.example.ProyectoBIArqui.bl;
 
 import com.example.ProyectoBIArqui.dao.GraphicVariableRepository;
+import com.example.ProyectoBIArqui.domain.GraphicType;
 import com.example.ProyectoBIArqui.domain.GraphicVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,11 @@ public class GraphicVariableBl {
             variables.add(gv.getVariable());
         }
         return variables;
+    }
+
+    public GraphicVariable findGV(int pk)
+    {
+        return graphicVariableRepository.findGraphicVariableByIdGraphicVariable(pk);
     }
 
 }

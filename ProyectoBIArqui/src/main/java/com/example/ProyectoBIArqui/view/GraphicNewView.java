@@ -1,8 +1,6 @@
 package com.example.ProyectoBIArqui.view;
 
 import com.example.ProyectoBIArqui.api.GraphicController;
-import com.example.ProyectoBIArqui.domain.Graphic;
-import com.example.ProyectoBIArqui.domain.Query;
 import com.example.ProyectoBIArqui.dto.GraphicConfig;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -11,7 +9,6 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -19,6 +16,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
@@ -61,17 +60,14 @@ public class GraphicNewView extends VerticalLayout {
         GraphicConfig nuevaGrafica = new GraphicConfig();
         Button save = new Button("Guardar");
         save.addClickListener(e -> {
-            System.out.println("AUXILIO--------------------->---------->"+ query.getValue());
             nuevaGrafica.setTitulo(title.getValue());
             nuevaGrafica.setDesc(description.getValue());
             nuevaGrafica.setGraphicType(type.getValue());
             nuevaGrafica.setQuery(query.getValue());
             nuevaGrafica.setVarInd(variable.getValue());
-
-            add(this.graphicController.generarGrafica(nuevaGrafica));
-            //TODO: GUARDAR GRAFICA EN LA BDD
-            /*save.getUI().ifPresent(ui ->
-                    ui.navigate("graphic/waso"));*/
+            this.graphicController.saveGrafica(nuevaGrafica);
+            save.getUI().ifPresent(ui ->
+                    ui.navigate("graphics"));
         });
 
         Chart waso = this.graphicController.generarGrafica(nuevaGrafica);
@@ -80,6 +76,7 @@ public class GraphicNewView extends VerticalLayout {
         setHorizontalComponentAlignment(Alignment.CENTER,title);
         setHorizontalComponentAlignment(Alignment.CENTER,query);
         setHorizontalComponentAlignment(Alignment.CENTER,type);
+        setHorizontalComponentAlignment(Alignment.CENTER,variable);
         setHorizontalComponentAlignment(Alignment.CENTER,description);
         setHorizontalComponentAlignment(Alignment.CENTER,save);
 
@@ -87,6 +84,7 @@ public class GraphicNewView extends VerticalLayout {
         add(title);
         add(query);
         add(type);
+        add(variable);
         add(description);
         add(save);
     }

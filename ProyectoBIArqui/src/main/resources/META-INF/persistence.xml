@@ -21,7 +21,7 @@
     <class>com.example.ProyectoBIArqui.domain.Dashboard</class>
     <class>com.example.ProyectoBIArqui.domain.GraphicType</class>
     <class>com.example.ProyectoBIArqui.domain.GraphicDashboard</class>
-    <class>com.example.ProyectoBIArqui.domain.User</class>
+    <class>com.example.ProyectoBIArqui.domain.Usuariobi</class>
     <class>com.example.ProyectoBIArqui.domain.GraphicvarGraphictype</class>
     <class>com.example.ProyectoBIArqui.domain.Query</class>
     <properties>

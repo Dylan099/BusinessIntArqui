@@ -1,9 +1,7 @@
 package com.example.ProyectoBIArqui.bl;
 
 import com.example.ProyectoBIArqui.dao.GraphicTypeRepository;
-import com.example.ProyectoBIArqui.domain.Graphic;
 import com.example.ProyectoBIArqui.domain.GraphicType;
-import com.example.ProyectoBIArqui.domain.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +25,10 @@ public class GraphicTypeBl {
             list.add(gt.getType());
         }
         return list;
+    }
+
+    public GraphicType findGraphicType(int pk)
+    {
+        return graphicTypeRepository.findGraphicTypeByIdGraphicType(pk);
     }
 }

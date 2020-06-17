@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface GraphicVariableRepository extends JpaRepository<GraphicVariable,Integer> {
     List<GraphicVariable> findAll();
+    GraphicVariable findGraphicVariableByIdGraphicVariable(int pk);
 }

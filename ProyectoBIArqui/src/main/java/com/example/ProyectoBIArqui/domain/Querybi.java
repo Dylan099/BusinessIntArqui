@@ -30,23 +30,23 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author mmari
  */
 @Entity
-@Table(name = "query")
+@Table(name = "querybi")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Query.findAll", query = "SELECT q FROM Query q"),
-    @NamedQuery(name = "Query.findByIdQuery", query = "SELECT q FROM Query q WHERE q.idQuery = :idQuery"),
-    @NamedQuery(name = "Query.findByQuery", query = "SELECT q FROM Query q WHERE q.query = :query"),
-    @NamedQuery(name = "Query.findByTxHost", query = "SELECT q FROM Query q WHERE q.txHost = :txHost"),
-    @NamedQuery(name = "Query.findByTxUser", query = "SELECT q FROM Query q WHERE q.txUser = :txUser"),
-    @NamedQuery(name = "Query.findByTxDate", query = "SELECT q FROM Query q WHERE q.txDate = :txDate")})
-public class Query implements Serializable {
+    @NamedQuery(name = "Querybi.findAll", query = "SELECT q FROM Querybi q"),
+    @NamedQuery(name = "Querybi.findByIdQuerybi", query = "SELECT q FROM Querybi q WHERE q.idQuerybi = :idQuerybi"),
+    @NamedQuery(name = "Querybi.findByQuery", query = "SELECT q FROM Querybi q WHERE q.query = :query"),
+    @NamedQuery(name = "Querybi.findByTxHost", query = "SELECT q FROM Querybi q WHERE q.txHost = :txHost"),
+    @NamedQuery(name = "Querybi.findByTxUser", query = "SELECT q FROM Querybi q WHERE q.txUser = :txUser"),
+    @NamedQuery(name = "Querybi.findByTxDate", query = "SELECT q FROM Querybi q WHERE q.txDate = :txDate")})
+public class Querybi implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id_query")
-    private Integer idQuery;
+    @Column(name = "id_querybi")
+    private Integer idQuerybi;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -67,32 +67,30 @@ public class Query implements Serializable {
     @Column(name = "tx_date")
     @Temporal(TemporalType.DATE)
     private Date txDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idQuery", fetch = FetchType.LAZY)
-    private Collection<QueryGraphicType> queryGraphicTypeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idQuery", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idQuerybi", fetch = FetchType.LAZY)
     private Collection<Graphic> graphicCollection;
 
-    public Query() {
+    public Querybi() {
     }
 
-    public Query(Integer idQuery) {
-        this.idQuery = idQuery;
+    public Querybi(Integer idQuerybi) {
+        this.idQuerybi = idQuerybi;
     }
 
-    public Query(Integer idQuery, String query, String txHost, String txUser, Date txDate) {
-        this.idQuery = idQuery;
+    public Querybi(Integer idQuerybi, String query, String txHost, String txUser, Date txDate) {
+        this.idQuerybi = idQuerybi;
         this.query = query;
         this.txHost = txHost;
         this.txUser = txUser;
         this.txDate = txDate;
     }
 
-    public Integer getIdQuery() {
-        return idQuery;
+    public Integer getIdQuerybi() {
+        return idQuerybi;
     }
 
-    public void setIdQuery(Integer idQuery) {
-        this.idQuery = idQuery;
+    public void setIdQuerybi(Integer idQuerybi) {
+        this.idQuerybi = idQuerybi;
     }
 
     public String getQuery() {
@@ -128,15 +126,6 @@ public class Query implements Serializable {
     }
 
     @XmlTransient
-    public Collection<QueryGraphicType> getQueryGraphicTypeCollection() {
-        return queryGraphicTypeCollection;
-    }
-
-    public void setQueryGraphicTypeCollection(Collection<QueryGraphicType> queryGraphicTypeCollection) {
-        this.queryGraphicTypeCollection = queryGraphicTypeCollection;
-    }
-
-    @XmlTransient
     public Collection<Graphic> getGraphicCollection() {
         return graphicCollection;
     }
@@ -148,18 +137,18 @@ public class Query implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idQuery != null ? idQuery.hashCode() : 0);
+        hash += (idQuerybi != null ? idQuerybi.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Query)) {
+        if (!(object instanceof Querybi)) {
             return false;
         }
-        Query other = (Query) object;
-        if ((this.idQuery == null && other.idQuery != null) || (this.idQuery != null && !this.idQuery.equals(other.idQuery))) {
+        Querybi other = (Querybi) object;
+        if ((this.idQuerybi == null && other.idQuerybi != null) || (this.idQuerybi != null && !this.idQuerybi.equals(other.idQuerybi))) {
             return false;
         }
         return true;
@@ -167,7 +156,7 @@ public class Query implements Serializable {
 
     @Override
     public String toString() {
-        return "com.example.ProyectoBIArqui.domain.Query[ idQuery=" + idQuery + " ]";
+        return "com.example.ProyectoBIArqui.domain.Querybi[ idQuerybi=" + idQuerybi + " ]";
     }
     
 }

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface GraphicTypeRepository extends JpaRepository<GraphicType, Integer> {
     List<GraphicType> findAll();
+    GraphicType findGraphicTypeByIdGraphicType(int pk);
 }

@@ -67,8 +67,8 @@ public class GraphicVariable implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "variable")
     private String variable;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "graphicVariableIdGraphicVariable", fetch = FetchType.LAZY)
-    private Collection<GraphicvarGraphictype> graphicvarGraphictypeCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idGraphicVariable", fetch = FetchType.LAZY)
+    private Collection<Graphic> graphicCollection;
 
     public GraphicVariable() {
     }
@@ -126,12 +126,12 @@ public class GraphicVariable implements Serializable {
     }
 
     @XmlTransient
-    public Collection<GraphicvarGraphictype> getGraphicvarGraphictypeCollection() {
-        return graphicvarGraphictypeCollection;
+    public Collection<Graphic> getGraphicCollection() {
+        return graphicCollection;
     }
 
-    public void setGraphicvarGraphictypeCollection(Collection<GraphicvarGraphictype> graphicvarGraphictypeCollection) {
-        this.graphicvarGraphictypeCollection = graphicvarGraphictypeCollection;
+    public void setGraphicCollection(Collection<Graphic> graphicCollection) {
+        this.graphicCollection = graphicCollection;
     }
 
     @Override

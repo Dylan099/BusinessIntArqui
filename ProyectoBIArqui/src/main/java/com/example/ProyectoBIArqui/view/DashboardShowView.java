@@ -23,6 +23,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
@@ -144,31 +145,21 @@ public class DashboardShowView extends VerticalLayout implements HasUrlParameter
 
     private MenuBar crearMenu() {
         MenuBar menuBar = new MenuBar();
-
         menuBar.setOpenOnHover(true);
-
-        Text selected = new Text("");
-        Div message = new Div(new Text("Selected: "), selected);
 
         MenuItem graficas = menuBar.addItem("Graficas");
         MenuItem dashboards = menuBar.addItem("Dashboards");
         MenuItem informes = menuBar.addItem("Informes");
-        menuBar.addItem("Sign Out", e -> selected.setText("Sign Out"));
+        menuBar.addItem("Sign Out");
 
-        graficas.getSubMenu().addItem("Crear",
-                e -> selected.setText("Crear"));
-        graficas.getSubMenu().addItem("Mostrar",
-                e -> selected.setText("Mostrar"));
+        graficas.getSubMenu().addItem(new RouterLink("Crear", GraphicNewView.class));
+        graficas.getSubMenu().addItem(new RouterLink("Mostrar", GraphicsView.class));
 
-        dashboards.getSubMenu().addItem("Crear",
-                e -> selected.setText("Crear"));
-        dashboards.getSubMenu().addItem("Mostrar",
-                e -> selected.setText("Mostrar"));
+        dashboards.getSubMenu().addItem(new RouterLink("Crear", DashboardNewView.class));
+        dashboards.getSubMenu().addItem(new RouterLink("Mostrar", DashboardsView.class));
 
-        informes.getSubMenu().addItem("Generar",
-                e -> selected.setText("Generar"));
-        informes.getSubMenu().addItem("Mostrar",
-                e -> selected.setText("Mostrar"));
+        informes.getSubMenu().addItem(new RouterLink("Crear", ReportNewView.class));
+        informes.getSubMenu().addItem(new RouterLink("Mostrar", ReportsView.class));
 
         return menuBar;
     }

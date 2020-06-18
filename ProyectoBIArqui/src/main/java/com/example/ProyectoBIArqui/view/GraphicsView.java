@@ -20,6 +20,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,31 +55,21 @@ public class GraphicsView extends VerticalLayout {
 
     private MenuBar crearMenu() {
         MenuBar menuBar = new MenuBar();
-
         menuBar.setOpenOnHover(true);
-
-        Text selected = new Text("");
-        Div message = new Div(new Text("Selected: "), selected);
 
         MenuItem graficas = menuBar.addItem("Graficas");
         MenuItem dashboards = menuBar.addItem("Dashboards");
         MenuItem informes = menuBar.addItem("Informes");
-        menuBar.addItem("Sign Out", e -> selected.setText("Sign Out"));
+        menuBar.addItem("Sign Out");
 
-        graficas.getSubMenu().addItem("Crear",
-                e -> selected.setText("Crear"));
-        graficas.getSubMenu().addItem("Mostrar",
-                e -> selected.setText("Mostrar"));
+        graficas.getSubMenu().addItem(new RouterLink("Crear", GraphicNewView.class));
+        graficas.getSubMenu().addItem(new RouterLink("Mostrar", GraphicsView.class));
 
-        dashboards.getSubMenu().addItem("Crear",
-                e -> selected.setText("Crear"));
-        dashboards.getSubMenu().addItem("Mostrar",
-                e -> selected.setText("Mostrar"));
+        dashboards.getSubMenu().addItem(new RouterLink("Crear", DashboardNewView.class));
+        dashboards.getSubMenu().addItem(new RouterLink("Mostrar", DashboardsView.class));
 
-        informes.getSubMenu().addItem("Generar",
-                e -> selected.setText("Generar"));
-        informes.getSubMenu().addItem("Mostrar",
-                e -> selected.setText("Mostrar"));
+        informes.getSubMenu().addItem(new RouterLink("Crear", ReportNewView.class));
+        informes.getSubMenu().addItem(new RouterLink("Mostrar", ReportsView.class));
 
         return menuBar;
     }
@@ -92,6 +83,10 @@ public class GraphicsView extends VerticalLayout {
         grid.addColumn(GraphicDto::getQuery).setHeader("query");
         grid.addColumn(GraphicDto::getDescription).setHeader("description");
         grid.addItemClickListener(e -> {
+           grid.getUI().ifPresent(ui ->
+              ui.navigate("graphic/show/"+e.getItem().getIdGraphic()));
+        });
+  /*
             GraphicConfig graphicConfig = new GraphicConfig();
             graphicConfig.setTitulo(e.getItem().getName());
             graphicConfig.setDesc(e.getItem().getDescription());
@@ -101,6 +96,7 @@ public class GraphicsView extends VerticalLayout {
             Chart chart = this.graphicController.generarGrafica(graphicConfig);
             add(chart);
         });
+*/
         //TODO BUSCAR POR USUARIO
         List<Graphic> graphicList = graphicController.findAllByUserId(1);
         for (Graphic g:graphicList

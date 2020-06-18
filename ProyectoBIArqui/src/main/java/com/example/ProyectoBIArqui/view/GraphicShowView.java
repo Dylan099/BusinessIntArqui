@@ -1,7 +1,15 @@
 package com.example.ProyectoBIArqui.view;
 
+import com.example.ProyectoBIArqui.api.DashboardController;
+import com.example.ProyectoBIArqui.api.GraphicController;
+import com.example.ProyectoBIArqui.api.GraphicDashboardController;
 import com.example.ProyectoBIArqui.bl.ChartGenerator;
+import com.example.ProyectoBIArqui.domain.Graphic;
+import com.example.ProyectoBIArqui.domain.GraphicDashboard;
+import com.example.ProyectoBIArqui.dto.GraphicConfig;
+import com.example.ProyectoBIArqui.dto.GraphicDto;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.contextmenu.MenuItem;
@@ -11,14 +19,41 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Route("graphic/show")
 @Theme(value = Material.class)
-public class GraphicShowView extends VerticalLayout {
-    public GraphicShowView(){
+public class GraphicShowView extends VerticalLayout implements HasUrlParameter<String> {
+
+    private String id_graphic;
+    private GraphicController graphicController;
+    private ChartGenerator chartGenerator;
+
+    @Override
+    public void setParameter(BeforeEvent beforeEvent, String dashboard) {
+        for (String s:beforeEvent.getLocation().getSegments()
+        ) {
+            System.out.println("AUXILIO ------------>"+s);
+        }
+        this.id_graphic = beforeEvent.getLocation().getSegments().get(2);
+        generarGraphic();
+    }
+
+    @Autowired
+    public GraphicShowView(GraphicController graphicController, ChartGenerator chartGenerator){
+        this.graphicController = graphicController;
+        this.chartGenerator = chartGenerator;
+    }
+
+    public void generarGraphic(){
         MenuBar menuBar = crearMenu();
         add(menuBar);
 
@@ -63,43 +98,33 @@ public class GraphicShowView extends VerticalLayout {
 
     private MenuBar crearMenu() {
         MenuBar menuBar = new MenuBar();
-
         menuBar.setOpenOnHover(true);
-
-        Text selected = new Text("");
-        Div message = new Div(new Text("Selected: "), selected);
 
         MenuItem graficas = menuBar.addItem("Graficas");
         MenuItem dashboards = menuBar.addItem("Dashboards");
         MenuItem informes = menuBar.addItem("Informes");
-        menuBar.addItem("Sign Out", e -> selected.setText("Sign Out"));
+        menuBar.addItem("Sign Out");
 
-        graficas.getSubMenu().addItem("Crear",
-                e -> selected.setText("Crear"));
-        graficas.getSubMenu().addItem("Mostrar",
-                e -> selected.setText("Mostrar"));
+        graficas.getSubMenu().addItem(new RouterLink("Crear", GraphicNewView.class));
+        graficas.getSubMenu().addItem(new RouterLink("Mostrar", GraphicsView.class));
 
-        dashboards.getSubMenu().addItem("Crear",
-                e -> selected.setText("Crear"));
-        dashboards.getSubMenu().addItem("Mostrar",
-                e -> selected.setText("Mostrar"));
+        dashboards.getSubMenu().addItem(new RouterLink("Crear", DashboardNewView.class));
+        dashboards.getSubMenu().addItem(new RouterLink("Mostrar", DashboardsView.class));
 
-        informes.getSubMenu().addItem("Generar",
-                e -> selected.setText("Generar"));
-        informes.getSubMenu().addItem("Mostrar",
-                e -> selected.setText("Mostrar"));
+        informes.getSubMenu().addItem(new RouterLink("Crear", ReportNewView.class));
+        informes.getSubMenu().addItem(new RouterLink("Mostrar", ReportsView.class));
 
         return menuBar;
     }
 
 
-    // Aca vamos a tener que hacer un super case
     private Chart TypeGraphic() {
         String type = "ChartType.AREASPLINE";
-        //ChartGenerator chartGenerator = new ChartGenerator();
-        //Chart chart = chartGenerator.TypeGraphic();
 
-        return null;
+        Graphic graphic = graphicController.findGraphicByIdGraphic( Integer.parseInt(id_graphic));
+        chartGenerator.setGraphic(graphic);
+        Chart chart = chartGenerator.GenerarGrafica();
+        return chart;
     }
 
 }

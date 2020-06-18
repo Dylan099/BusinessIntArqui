@@ -24,7 +24,6 @@ import java.util.List;
 
 @Route("dashboards")
 @Theme(value = Material.class)
-
 public class DashboardsView extends VerticalLayout {
 
     GraphicController graphicController;
@@ -86,10 +85,10 @@ public class DashboardsView extends VerticalLayout {
         grid.addColumn(DashboardDto::getIdDashboard).setHeader("IdDashboard");
         grid.addColumn(DashboardDto::getName).setHeader("name");
         grid.addColumn(DashboardDto::getDescription).setHeader("Description");
+
         grid.addItemClickListener(e -> {
-            H2 message = new H2();
-            message.add(e.getItem().toString());
-            add(message);
+            grid.getUI().ifPresent(ui ->
+                    ui.navigate("dashboard/show/"+e.getItem().getIdDashboard()));
         });
         List<Integer> graphicDashboards = graphicDashboardController.findDashboardForView();
         List<Dashboard> dashboardList = new ArrayList<>();

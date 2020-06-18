@@ -114,4 +114,5 @@ public class GraphicBl {
         return graphicRepository.findGraphicByIdQuerybi(querybi);
     }
     public Graphic findGraphicByName(String name){return graphicRepository.findGraphicByName(name);}
+    public Graphic findGraphicByIdGraphic(int pk){return graphicRepository.findGraphicByIdGraphic(pk);}
 }

@@ -1,5 +1,6 @@
 package com.example.ProyectoBIArqui.dao;
 
+import com.example.ProyectoBIArqui.domain.Dashboard;
 import com.example.ProyectoBIArqui.domain.Graphic;
 import com.example.ProyectoBIArqui.domain.GraphicDashboard;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,5 @@ public interface GraphicDashboardRepository extends JpaRepository<GraphicDashboa
     List<GraphicDashboard> findByDistinctByIdGraphic(int idGraphic);
     @Query(value = " select distinct id_dashboard from graphic_dashboard inner join graphic on graphic_dashboard.id_graphic = graphic.id_graphic;", nativeQuery = true)
     List<Integer> QueryWaso();
+    List<GraphicDashboard> findAllByIdDashboard(Dashboard dashboard);
 }

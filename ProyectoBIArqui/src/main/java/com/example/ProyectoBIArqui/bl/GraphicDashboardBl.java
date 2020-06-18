@@ -1,6 +1,7 @@
 package com.example.ProyectoBIArqui.bl;
 
 import com.example.ProyectoBIArqui.dao.GraphicDashboardRepository;
+import com.example.ProyectoBIArqui.domain.Dashboard;
 import com.example.ProyectoBIArqui.domain.GraphicDashboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,4 +26,6 @@ public class GraphicDashboardBl {
     {
         return graphicDashboardRepository.QueryWaso();
     }
+
+    public List<GraphicDashboard> findGraphicsByDashboard(Dashboard dashboard){return graphicDashboardRepository.findAllByIdDashboard(dashboard);}
 }

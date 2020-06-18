@@ -13,4 +13,5 @@ public interface GraphicRepository extends JpaRepository<Graphic,Integer> {
     List<Graphic> findAllByIdUserbi(Userbi userbi);
     Graphic findGraphicByIdQuerybi(Querybi querybi);
     Graphic findGraphicByName(String name);
+    Graphic findGraphicByIdGraphic(int pk);
 }

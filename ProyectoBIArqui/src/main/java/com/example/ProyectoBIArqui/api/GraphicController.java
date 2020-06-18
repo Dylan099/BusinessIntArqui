@@ -65,4 +65,6 @@ public class GraphicController {
     public Graphic findGraphicByName(String name){return graphicBl.findGraphicByName(name);}
 
     public String wasoCasco(Authentication authentication){return authentication.getName();}
+
+    public Graphic findGraphicByIdGraphic(int pk){return graphicBl.findGraphicByIdGraphic(pk);}
 }

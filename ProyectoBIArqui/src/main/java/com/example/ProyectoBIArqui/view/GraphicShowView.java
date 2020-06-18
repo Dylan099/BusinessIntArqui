@@ -1,5 +1,6 @@
 package com.example.ProyectoBIArqui.view;
 
+import com.example.ProyectoBIArqui.bl.ChartGenerator;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.charts.Chart;
@@ -95,10 +96,10 @@ public class GraphicShowView extends VerticalLayout {
     // Aca vamos a tener que hacer un super case
     private Chart TypeGraphic() {
         String type = "ChartType.AREASPLINE";
-        ChartTest chartTest = new ChartTest();
-        Chart chart = chartTest.TypeGraphic();
+        //ChartGenerator chartGenerator = new ChartGenerator();
+        //Chart chart = chartGenerator.TypeGraphic();
 
-        return chart;
+        return null;
     }
 
 }

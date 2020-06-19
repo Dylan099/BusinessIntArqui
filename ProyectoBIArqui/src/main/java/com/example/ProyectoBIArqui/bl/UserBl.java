@@ -19,4 +19,6 @@ public class UserBl {
     public List<Userbi> findAll(){
         return userRepository.findAll();
     }
+
+    public Userbi finUserbiByUsername(String s){return userRepository.findUserbiByUsername(s);}
 }

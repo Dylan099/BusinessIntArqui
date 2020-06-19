@@ -20,16 +20,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Route("graphic/new")
 @Theme(value = Material.class)
 public class GraphicNewView extends VerticalLayout {
     GraphicController graphicController;
+    HttpServletResponse HttpServletResponse;
 
     @Autowired
-    public GraphicNewView(GraphicController graphicController){
+    public GraphicNewView(GraphicController graphicController, HttpServletResponse httpServletResponse){
         this.graphicController =  graphicController;
+        this.HttpServletResponse = httpServletResponse;
         MenuBar menuBar = crearMenu();
         add(menuBar);
 
@@ -68,10 +72,8 @@ public class GraphicNewView extends VerticalLayout {
             nuevaGrafica.setVarInd(variable.getValue());
             this.graphicController.saveGrafica(nuevaGrafica);
             save.getUI().ifPresent(ui ->
-                    ui.navigate("graphics"));
+                    ui.navigate(""));
         });
-
-        Chart waso = this.graphicController.generarGrafica(nuevaGrafica);
 
         setHorizontalComponentAlignment(Alignment.CENTER,titleClass);
         setHorizontalComponentAlignment(Alignment.CENTER,title);
@@ -85,7 +87,6 @@ public class GraphicNewView extends VerticalLayout {
         add(title);
         add(query);
         add(type);
-        add(variable);
         add(description);
         add(save);
     }
@@ -97,8 +98,7 @@ public class GraphicNewView extends VerticalLayout {
 
         MenuItem graficas = menuBar.addItem("Graficas");
         MenuItem dashboards = menuBar.addItem("Dashboards");
-        MenuItem informes = menuBar.addItem("Informes");
-        menuBar.addItem("Sign Out");
+        MenuItem signOut = menuBar.addItem("Sign Out");
 
         graficas.getSubMenu().addItem(new RouterLink("Crear", GraphicNewView.class));
         graficas.getSubMenu().addItem(new RouterLink("Mostrar", GraphicsView.class));
@@ -106,9 +106,14 @@ public class GraphicNewView extends VerticalLayout {
         dashboards.getSubMenu().addItem(new RouterLink("Crear", DashboardNewView.class));
         dashboards.getSubMenu().addItem(new RouterLink("Mostrar", DashboardsView.class));
 
-        informes.getSubMenu().addItem(new RouterLink("Crear", ReportNewView.class));
-        informes.getSubMenu().addItem(new RouterLink("Mostrar", ReportsView.class));
-
+        signOut.addClickListener(e -> {
+            System.out.println("ALGO");
+            try {
+                graphicController.localRedirect(HttpServletResponse);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
         return menuBar;
     }
 

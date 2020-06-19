@@ -3,6 +3,7 @@ package com.example.ProyectoBIArqui.view;
 import com.example.ProyectoBIArqui.api.DashboardController;
 import com.example.ProyectoBIArqui.api.GraphicController;
 import com.example.ProyectoBIArqui.api.GraphicDashboardController;
+import com.example.ProyectoBIArqui.api.QueryController;
 import com.example.ProyectoBIArqui.bl.ChartGenerator;
 import com.example.ProyectoBIArqui.domain.Graphic;
 import com.example.ProyectoBIArqui.domain.GraphicDashboard;
@@ -27,6 +28,8 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Route("graphic/show")
@@ -36,7 +39,9 @@ public class GraphicShowView extends VerticalLayout implements HasUrlParameter<S
     private String id_graphic;
     private GraphicController graphicController;
     private ChartGenerator chartGenerator;
-
+    private QueryController queryController;
+    HttpServletResponse HttpServletResponse;
+    Graphic graphic;
     @Override
     public void setParameter(BeforeEvent beforeEvent, String dashboard) {
         for (String s:beforeEvent.getLocation().getSegments()
@@ -44,51 +49,46 @@ public class GraphicShowView extends VerticalLayout implements HasUrlParameter<S
             System.out.println("AUXILIO ------------>"+s);
         }
         this.id_graphic = beforeEvent.getLocation().getSegments().get(2);
+        graphic = graphicController.findGraphicByIdGraphic( Integer.parseInt(id_graphic));
         generarGraphic();
     }
 
     @Autowired
-    public GraphicShowView(GraphicController graphicController, ChartGenerator chartGenerator){
+    public GraphicShowView(GraphicController graphicController, ChartGenerator chartGenerator,
+                           QueryController queryController, HttpServletResponse httpServletResponse){
         this.graphicController = graphicController;
         this.chartGenerator = chartGenerator;
+        this.queryController = queryController;
+        this.HttpServletResponse = httpServletResponse;
     }
 
     public void generarGraphic(){
         MenuBar menuBar = crearMenu();
         add(menuBar);
 
-        Label title = new Label("Titulo de la grafica");
         Chart chart = TypeGraphic();
-        Label description = new Label("Descripcion de la grafica");
 
         FormLayout buttonsLayout = new FormLayout();
         buttonsLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("50em", 1),
                 new FormLayout.ResponsiveStep("50em", 2));
 
-        Button edit = new Button("Editar");
-        edit.addClickListener(e -> {
-            H2 message = new H2();
-            message.add(new Text("Editar"));
-            add(message);
-        });
-
         Button delete = new Button("Borrar");
         delete.addClickListener(e -> {
-            H2 message = new H2();
-            message.add(new Text("Borrar"));
-            add(message);
+            graphicController.deleteGraph(Integer.parseInt(id_graphic));
+            delete.getUI().ifPresent(ui ->
+                    ui.navigate(""));
         });
 
-        buttonsLayout.add(edit, delete);
+        buttonsLayout.add(delete);
 
+        Label description = new Label();
+        description.add(new Text(queryController.findQuerybibyIdQuery(graphic.getIdQuerybi().getIdQuerybi()).getQuery()));
 
-        setHorizontalComponentAlignment(Alignment.CENTER,title);
-        setHorizontalComponentAlignment(Alignment.CENTER,chart);
         setHorizontalComponentAlignment(Alignment.CENTER,description);
+        setHorizontalComponentAlignment(Alignment.CENTER,chart);
         setHorizontalComponentAlignment(Alignment.CENTER,buttonsLayout);
 
-        add(title);
         add(chart);
         add(description);
         add(buttonsLayout);
@@ -102,8 +102,7 @@ public class GraphicShowView extends VerticalLayout implements HasUrlParameter<S
 
         MenuItem graficas = menuBar.addItem("Graficas");
         MenuItem dashboards = menuBar.addItem("Dashboards");
-        MenuItem informes = menuBar.addItem("Informes");
-        menuBar.addItem("Sign Out");
+        MenuItem signOut = menuBar.addItem("Sign Out");
 
         graficas.getSubMenu().addItem(new RouterLink("Crear", GraphicNewView.class));
         graficas.getSubMenu().addItem(new RouterLink("Mostrar", GraphicsView.class));
@@ -111,17 +110,20 @@ public class GraphicShowView extends VerticalLayout implements HasUrlParameter<S
         dashboards.getSubMenu().addItem(new RouterLink("Crear", DashboardNewView.class));
         dashboards.getSubMenu().addItem(new RouterLink("Mostrar", DashboardsView.class));
 
-        informes.getSubMenu().addItem(new RouterLink("Crear", ReportNewView.class));
-        informes.getSubMenu().addItem(new RouterLink("Mostrar", ReportsView.class));
-
+        signOut.addClickListener(e -> {
+            System.out.println("ALGO");
+            try {
+                graphicController.localRedirect(HttpServletResponse);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
         return menuBar;
     }
 
 
     private Chart TypeGraphic() {
         String type = "ChartType.AREASPLINE";
-
-        Graphic graphic = graphicController.findGraphicByIdGraphic( Integer.parseInt(id_graphic));
         chartGenerator.setGraphic(graphic);
         Chart chart = chartGenerator.GenerarGrafica();
         return chart;

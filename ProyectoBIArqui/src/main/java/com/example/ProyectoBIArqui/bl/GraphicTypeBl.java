@@ -31,4 +31,6 @@ public class GraphicTypeBl {
     {
         return graphicTypeRepository.findGraphicTypeByIdGraphicType(pk);
     }
+
+    public GraphicType findGraphicTypeByType(String tipo){return graphicTypeRepository.findGraphicTypeByType(tipo);}
 }

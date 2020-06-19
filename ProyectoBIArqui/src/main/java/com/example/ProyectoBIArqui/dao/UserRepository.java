@@ -10,4 +10,5 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<Userbi,Integer> {
     List<Userbi> findAll();
     Userbi findUserbiByIdUserbi(int pk);
+    Userbi findUserbiByUsername(String s);
 }

@@ -29,9 +29,11 @@ public class GraphicBl {
     UserRepository userRepository;
     GraphicTypeRepository graphicTypeRepository;
     GraphicVariableRepository graphicVariableRepository;
+    GraphicDashboardRepository graphicDashboardRepository;
 
     @Autowired
-    public GraphicBl(GraphicRepository graphicRepository, PersonaRepository personaRepository, EstadoRepository estadoRepository, ResidenciaRepository residenciaRepository, DepartamentoRepository departamentoRepository, QueryRepository queryRepository, UserRepository userRepository, GraphicTypeRepository graphicTypeRepository, GraphicVariableRepository graphicVariableRepository) {
+    public GraphicBl(GraphicRepository graphicRepository, PersonaRepository personaRepository, EstadoRepository estadoRepository, ResidenciaRepository residenciaRepository, DepartamentoRepository departamentoRepository, QueryRepository queryRepository, UserRepository userRepository, GraphicTypeRepository graphicTypeRepository, GraphicVariableRepository graphicVariableRepository
+    ,GraphicDashboardRepository graphicDashboardRepository) {
         this.graphicRepository = graphicRepository;
         this.personaRepository = personaRepository;
         this.estadoRepository = estadoRepository;
@@ -41,6 +43,7 @@ public class GraphicBl {
         this.userRepository = userRepository;
         this.graphicTypeRepository = graphicTypeRepository;
         this.graphicVariableRepository = graphicVariableRepository;
+        this.graphicDashboardRepository = graphicDashboardRepository;
     }
 
     public void saveGraphic(GraphicConfig graphicConfig)
@@ -51,7 +54,7 @@ public class GraphicBl {
         graphic.setDescription(graphicConfig.getDesc());
         graphic.setIdQuerybi(queryRepository.findQuerybiByQuery(graphicConfig.getQuery()));
         graphic.setIdUserbi(userRepository.findUserbiByIdUserbi(1));
-        graphic.setIdGraphicType(graphicTypeRepository.findGraphicTypeByIdGraphicType(1));
+        graphic.setIdGraphicType(graphicTypeRepository.findGraphicTypeByType(graphicConfig.getGraphicType()));
         graphic.setIdGraphicVariable(graphicVariableRepository.findGraphicVariableByIdGraphicVariable(1));
         graphic.setTxDate(new Date());
         graphic.setTxHost("Host");
@@ -115,4 +118,14 @@ public class GraphicBl {
     }
     public Graphic findGraphicByName(String name){return graphicRepository.findGraphicByName(name);}
     public Graphic findGraphicByIdGraphic(int pk){return graphicRepository.findGraphicByIdGraphic(pk);}
+
+    public void deleteGraph(int pk){
+        Graphic graphic = graphicRepository.findGraphicByIdGraphic(pk);
+        List<GraphicDashboard> graphicDashboards = graphicDashboardRepository.findAllByIdGraphic(graphic);
+        for (GraphicDashboard gd : graphicDashboards
+        ){
+            graphicDashboardRepository.delete(gd);
+        }
+        graphicRepository.delete(graphic);
+    }
 }

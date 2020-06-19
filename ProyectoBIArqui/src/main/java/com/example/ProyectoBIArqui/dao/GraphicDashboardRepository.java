@@ -17,4 +17,5 @@ public interface GraphicDashboardRepository extends JpaRepository<GraphicDashboa
     @Query(value = " select distinct id_dashboard from graphic_dashboard inner join graphic on graphic_dashboard.id_graphic = graphic.id_graphic;", nativeQuery = true)
     List<Integer> QueryWaso();
     List<GraphicDashboard> findAllByIdDashboard(Dashboard dashboard);
+    List<GraphicDashboard> findAllByIdGraphic(Graphic graphic);
 }

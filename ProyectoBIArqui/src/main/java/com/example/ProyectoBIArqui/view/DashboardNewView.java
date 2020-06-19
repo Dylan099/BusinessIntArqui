@@ -6,6 +6,8 @@ import com.example.ProyectoBIArqui.api.QueryController;
 import com.example.ProyectoBIArqui.domain.Graphic;
 import com.example.ProyectoBIArqui.domain.Querybi;
 import com.example.ProyectoBIArqui.dto.DashboardConfig;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -21,6 +23,8 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -32,12 +36,14 @@ public class DashboardNewView extends VerticalLayout {
     GraphicController graphicController;
     QueryController queryController;
     DashboardController dashboardController;
+    HttpServletResponse HttpServletResponse;
 
     public DashboardNewView(GraphicController graphicController, QueryController queryController
-    ,DashboardController dashboardController){
+    ,DashboardController dashboardController, HttpServletResponse httpServletResponse){
         this.graphicController = graphicController;
         this.queryController = queryController;
         this.dashboardController = dashboardController;
+        this.HttpServletResponse = httpServletResponse;
         MenuBar menuBar = crearMenu();
         add(menuBar);
 
@@ -51,7 +57,7 @@ public class DashboardNewView extends VerticalLayout {
         CheckboxGroup<String> checkboxGroupGrapgics = new CheckboxGroup<>();
         String[] graficas = new String[graphicList.size()];
         for (int i = 0; i < graphicList.size(); i++) {
-            graficas[i] = graphicList.get(i).getName();
+            graficas[i] = graphicList.get(i).getName()+"\n";
         }
         checkboxGroupGrapgics.setItems(graficas);
         TextArea description = new TextArea("Descripcion de la grafica");
@@ -72,7 +78,6 @@ public class DashboardNewView extends VerticalLayout {
             save.getUI().ifPresent(ui ->
                     ui.navigate("dashboards"));
         });
-
 
         setHorizontalComponentAlignment(Alignment.CENTER,titleClass);
         setHorizontalComponentAlignment(Alignment.CENTER,title);
@@ -96,8 +101,7 @@ public class DashboardNewView extends VerticalLayout {
 
         MenuItem graficas = menuBar.addItem("Graficas");
         MenuItem dashboards = menuBar.addItem("Dashboards");
-        MenuItem informes = menuBar.addItem("Informes");
-        menuBar.addItem("Sign Out");
+        MenuItem signOut = menuBar.addItem("Sign Out");
 
         graficas.getSubMenu().addItem(new RouterLink("Crear", GraphicNewView.class));
         graficas.getSubMenu().addItem(new RouterLink("Mostrar", GraphicsView.class));
@@ -105,8 +109,14 @@ public class DashboardNewView extends VerticalLayout {
         dashboards.getSubMenu().addItem(new RouterLink("Crear", DashboardNewView.class));
         dashboards.getSubMenu().addItem(new RouterLink("Mostrar", DashboardsView.class));
 
-        informes.getSubMenu().addItem(new RouterLink("Crear", ReportNewView.class));
-        informes.getSubMenu().addItem(new RouterLink("Mostrar", ReportsView.class));
+        signOut.addClickListener(e -> {
+            System.out.println("ALGO");
+            try {
+                graphicController.localRedirect(HttpServletResponse);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         return menuBar;
     }

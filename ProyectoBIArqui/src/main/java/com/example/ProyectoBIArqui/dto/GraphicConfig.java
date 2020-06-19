@@ -1,5 +1,7 @@
 package com.example.ProyectoBIArqui.dto;
 
+import com.example.ProyectoBIArqui.domain.Graphic;
+
 public class GraphicConfig {
     String titulo;
     String query;
@@ -16,6 +18,14 @@ public class GraphicConfig {
         this.graphicType = graphicType;
         this.varInd = varInd;
         this.desc = desc;
+    }
+
+    public GraphicConfig(Graphic graphic){
+        this.titulo = graphic.getName();
+        this.query = "Mostrar numero de contagios en La Paz";
+        this.graphicType = "Grafico de lineas";
+        this.varInd = "Fecha";
+        this.desc = graphic.getDescription();
     }
 
     public String getTitulo() {

@@ -17,4 +17,6 @@ public class UserController {
     }
 
     public List<Userbi> findAll(){return userBl.findAll();}
+
+    public Userbi findUserByUsername(String s){return userBl.finUserbiByUsername(s);}
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class DashboardBl {
@@ -49,5 +50,16 @@ public class DashboardBl {
     public Dashboard findDashboardByIdDashboard(int pk)
     {
         return dashboardRepository.findDashboardByIdDashboard(pk);
+    }
+
+    public void deleteDashboard(int pk)
+    {
+        Dashboard dashboard = dashboardRepository.findDashboardByIdDashboard(pk);
+        List<GraphicDashboard> graphicDashboards = graphicDashboardRepository.findAllByIdDashboard(dashboard);
+        for (GraphicDashboard gd : graphicDashboards
+        ){
+            graphicDashboardRepository.delete(gd);
+        }
+        dashboardRepository.delete(dashboard);
     }
 }

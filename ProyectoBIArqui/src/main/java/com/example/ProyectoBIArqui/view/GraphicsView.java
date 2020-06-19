@@ -1,14 +1,9 @@
 package com.example.ProyectoBIArqui.view;
 
-import com.example.ProyectoBIArqui.api.GraphicController;
-import com.example.ProyectoBIArqui.api.GraphicTypeController;
-import com.example.ProyectoBIArqui.api.GraphicVariableController;
-import com.example.ProyectoBIArqui.api.QueryController;
+import com.example.ProyectoBIArqui.api.*;
 import com.example.ProyectoBIArqui.bl.QueryBl;
-import com.example.ProyectoBIArqui.domain.Graphic;
-import com.example.ProyectoBIArqui.domain.GraphicType;
-import com.example.ProyectoBIArqui.domain.GraphicVariable;
-import com.example.ProyectoBIArqui.domain.Querybi;
+import com.example.ProyectoBIArqui.dao.UserRepository;
+import com.example.ProyectoBIArqui.domain.*;
 import com.example.ProyectoBIArqui.dto.GraphicConfig;
 import com.example.ProyectoBIArqui.dto.GraphicDto;
 import com.vaadin.flow.component.Text;
@@ -24,11 +19,18 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-@Route("graphics")
+@Route("")
 @Theme(value = Material.class)
 
 public class GraphicsView extends VerticalLayout {
@@ -36,17 +38,21 @@ public class GraphicsView extends VerticalLayout {
     QueryController queryController;
     GraphicTypeController graphicTypeController;
     GraphicVariableController graphicVariableController;
+    HttpServletResponse HttpServletResponse;
+    UserController userController;
 
     @Autowired
     public GraphicsView(GraphicController graphicController, QueryController queryController,
-    GraphicTypeController graphicTypeController, GraphicVariableController graphicVariableController){
+    GraphicTypeController graphicTypeController, GraphicVariableController graphicVariableController,
+                        HttpServletResponse httpServletResponse, UserController userController){
         this.graphicController = graphicController;
         this.queryController = queryController;
         this.graphicTypeController = graphicTypeController;
         this.graphicVariableController = graphicVariableController;
+        this.HttpServletResponse = httpServletResponse;
+        this.userController = userController;
         MenuBar menuBar = crearMenu();
         add(menuBar);
-
         Grid<GraphicDto> grid = gridAddGraophics();
         add(grid);
 
@@ -59,8 +65,7 @@ public class GraphicsView extends VerticalLayout {
 
         MenuItem graficas = menuBar.addItem("Graficas");
         MenuItem dashboards = menuBar.addItem("Dashboards");
-        MenuItem informes = menuBar.addItem("Informes");
-        menuBar.addItem("Sign Out");
+        MenuItem signOut = menuBar.addItem("Sign Out");
 
         graficas.getSubMenu().addItem(new RouterLink("Crear", GraphicNewView.class));
         graficas.getSubMenu().addItem(new RouterLink("Mostrar", GraphicsView.class));
@@ -68,8 +73,14 @@ public class GraphicsView extends VerticalLayout {
         dashboards.getSubMenu().addItem(new RouterLink("Crear", DashboardNewView.class));
         dashboards.getSubMenu().addItem(new RouterLink("Mostrar", DashboardsView.class));
 
-        informes.getSubMenu().addItem(new RouterLink("Crear", ReportNewView.class));
-        informes.getSubMenu().addItem(new RouterLink("Mostrar", ReportsView.class));
+        signOut.addClickListener(e -> {
+            System.out.println("ALGO");
+            try {
+                graphicController.localRedirect(HttpServletResponse);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         return menuBar;
     }
@@ -97,8 +108,10 @@ public class GraphicsView extends VerticalLayout {
             add(chart);
         });
 */
-        //TODO BUSCAR POR USUARIO
-        List<Graphic> graphicList = graphicController.findAllByUserId(1);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Userbi userbi = userController.findUserByUsername(graphicController.wasoCasco(authentication));
+        System.out.println("ID USUARIO ACTUAL: "+userbi.getIdUserbi());
+        List<Graphic> graphicList = graphicController.findAllByUserId(userbi.getIdUserbi());
         for (Graphic g:graphicList
              ) {
             Querybi query= queryController.findQuerybibyIdQuery(g.getIdQuerybi().getIdQuerybi());

@@ -15,4 +15,6 @@ public class GraphicTypeController {
     }
 
     public GraphicType findGraphicType(int pk){return graphicTypeBl.findGraphicType(pk);}
+
+    public GraphicType findGraphicTypeByType(String type){return graphicTypeBl.findGraphicTypeByType(type);}
 }

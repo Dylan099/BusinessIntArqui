@@ -1,7 +1,9 @@
 package com.example.ProyectoBIArqui.bl;
 
 import com.example.ProyectoBIArqui.dao.QueryRepository;
+import com.example.ProyectoBIArqui.domain.Persona1;
 import com.example.ProyectoBIArqui.domain.Querybi;
+import com.example.ProyectoBIArqui.dto.QueryXY;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

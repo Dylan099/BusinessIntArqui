@@ -14,7 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -67,4 +70,10 @@ public class GraphicController {
     public String wasoCasco(Authentication authentication){return authentication.getName();}
 
     public Graphic findGraphicByIdGraphic(int pk){return graphicBl.findGraphicByIdGraphic(pk);}
+
+    public void deleteGraph(int pk){graphicBl.deleteGraph(pk);}
+
+    public void localRedirect(HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.sendRedirect("http://localhost:8080/logout");
+    }
 }

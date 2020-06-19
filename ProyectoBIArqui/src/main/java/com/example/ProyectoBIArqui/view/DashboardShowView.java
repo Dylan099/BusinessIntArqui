@@ -4,8 +4,13 @@ import com.example.ProyectoBIArqui.api.DashboardController;
 import com.example.ProyectoBIArqui.api.GraphicController;
 import com.example.ProyectoBIArqui.api.GraphicDashboardController;
 import com.example.ProyectoBIArqui.bl.ChartGenerator;
+import com.example.ProyectoBIArqui.domain.Dashboard;
 import com.example.ProyectoBIArqui.domain.Graphic;
 import com.example.ProyectoBIArqui.domain.GraphicDashboard;
+import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.board.Board;
@@ -27,15 +32,19 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
+import net.minidev.json.JSONArray;
+import org.apache.batik.svggen.SVGGeneratorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamSource;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
+
+import static javax.imageio.ImageIO.read;
 
 @Route("dashboard/show")
 @Theme(value = Material.class)
@@ -46,6 +55,7 @@ public class DashboardShowView extends VerticalLayout implements HasUrlParameter
     private GraphicDashboardController graphicDashboardController;
     private GraphicController graphicController;
     private ChartGenerator chartGenerator;
+    HttpServletResponse httpServletResponse;
     @Override
     public void setParameter(BeforeEvent beforeEvent, String dashboard) {
         for (String s:beforeEvent.getLocation().getSegments()
@@ -58,12 +68,12 @@ public class DashboardShowView extends VerticalLayout implements HasUrlParameter
 
     @Autowired
     public DashboardShowView(DashboardController dashboardController, GraphicDashboardController graphicDashboardController
-    ,GraphicController graphicController, ChartGenerator chartGenerator){
+    ,GraphicController graphicController, ChartGenerator chartGenerator, HttpServletResponse httpServletResponse){
         this.dashboardController = dashboardController;
         this.graphicDashboardController = graphicDashboardController;
         this.graphicController = graphicController;
         this.chartGenerator = chartGenerator;
-
+        this.httpServletResponse = httpServletResponse;
     }
     static {
 
@@ -75,12 +85,12 @@ public class DashboardShowView extends VerticalLayout implements HasUrlParameter
         System.out.println("PLS ---------------->" + id_dashboard);
         MenuBar menuBar = crearMenu();
         add(menuBar);
-
+        Dashboard dashboard = dashboardController.findDashboardByIdDashboard(Integer.parseInt(id_dashboard));
         H1 title = new H1();
-        title.add(new Text("Titulo del dashboard"));
+        title.add(new Text(dashboard.getName()));
 
         Label description = new Label();
-        description.add(new Text("Descripcion del dashboard"));
+        description.add(new Text(dashboard.getDescription()));
 
         Board board = boardAddGraphics();
 
@@ -89,31 +99,15 @@ public class DashboardShowView extends VerticalLayout implements HasUrlParameter
                 new FormLayout.ResponsiveStep("50em", 1),
                 new FormLayout.ResponsiveStep("50em", 2));
 
-        Button edit = new Button("Editar");
-        edit.addClickListener(e -> {
-            H2 message = new H2();
-            message.add(new Text("Editar"));
-            add(message);
-        });
 
         Button delete = new Button("Borrar");
         delete.addClickListener(e -> {
-            H2 message = new H2();
-            message.add(new Text("Borrar"));
-            add(message);
-            Robot robot = null;
-            try {
-                robot = new Robot();
-                Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-                BufferedImage capture = robot.createScreenCapture(screenRect);
-                File outputfile = new File("image.jpg");
-                ImageIO.write(capture, "jpg", outputfile);
-            } catch (AWTException | IOException ex) {
-                ex.printStackTrace();
-            }
+            dashboardController.deleteDashboard(Integer.parseInt(id_dashboard));
+            delete.getUI().ifPresent(ui ->
+                    ui.navigate("dashboards"));
         });
 
-        buttonsLayout.add(edit, delete);
+        buttonsLayout.add(delete);
 
 
         setHorizontalComponentAlignment(Alignment.CENTER,title);
@@ -149,8 +143,7 @@ public class DashboardShowView extends VerticalLayout implements HasUrlParameter
 
         MenuItem graficas = menuBar.addItem("Graficas");
         MenuItem dashboards = menuBar.addItem("Dashboards");
-        MenuItem informes = menuBar.addItem("Informes");
-        menuBar.addItem("Sign Out");
+        MenuItem signOut = menuBar.addItem("Sign Out");
 
         graficas.getSubMenu().addItem(new RouterLink("Crear", GraphicNewView.class));
         graficas.getSubMenu().addItem(new RouterLink("Mostrar", GraphicsView.class));
@@ -158,9 +151,14 @@ public class DashboardShowView extends VerticalLayout implements HasUrlParameter
         dashboards.getSubMenu().addItem(new RouterLink("Crear", DashboardNewView.class));
         dashboards.getSubMenu().addItem(new RouterLink("Mostrar", DashboardsView.class));
 
-        informes.getSubMenu().addItem(new RouterLink("Crear", ReportNewView.class));
-        informes.getSubMenu().addItem(new RouterLink("Mostrar", ReportsView.class));
-
+        signOut.addClickListener(e -> {
+            System.out.println("ALGO");
+            try {
+                graphicController.localRedirect(httpServletResponse);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
         return menuBar;
     }
 

@@ -3,8 +3,10 @@ package com.example.ProyectoBIArqui.view;
 import com.example.ProyectoBIArqui.api.DashboardController;
 import com.example.ProyectoBIArqui.api.GraphicController;
 import com.example.ProyectoBIArqui.api.QueryController;
+import com.example.ProyectoBIArqui.api.UserController;
 import com.example.ProyectoBIArqui.domain.Graphic;
 import com.example.ProyectoBIArqui.domain.Querybi;
+import com.example.ProyectoBIArqui.domain.Userbi;
 import com.example.ProyectoBIArqui.dto.DashboardConfig;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -22,6 +24,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -37,13 +41,15 @@ public class DashboardNewView extends VerticalLayout {
     QueryController queryController;
     DashboardController dashboardController;
     HttpServletResponse HttpServletResponse;
+    UserController userController;
 
     public DashboardNewView(GraphicController graphicController, QueryController queryController
-    ,DashboardController dashboardController, HttpServletResponse httpServletResponse){
+    ,DashboardController dashboardController, HttpServletResponse httpServletResponse, UserController userController){
         this.graphicController = graphicController;
         this.queryController = queryController;
         this.dashboardController = dashboardController;
         this.HttpServletResponse = httpServletResponse;
+        this.userController = userController;
         MenuBar menuBar = crearMenu();
         add(menuBar);
 
@@ -52,8 +58,10 @@ public class DashboardNewView extends VerticalLayout {
 
         TextArea title = new TextArea("Titulo del dashboard");
 
-        //TODO: RECUPERAR GRAFICAS POR USUARIO
-        List<Graphic> graphicList = graphicController.findAllByUserId(1);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Userbi userbi = userController.findUserByUsername(graphicController.wasoCasco(authentication));
+        System.out.println("ID USUARIO ACTUAL: "+userbi.getIdUserbi());
+        List<Graphic> graphicList = graphicController.findAllByUserId(userbi.getIdUserbi());
         CheckboxGroup<String> checkboxGroupGrapgics = new CheckboxGroup<>();
         String[] graficas = new String[graphicList.size()];
         for (int i = 0; i < graphicList.size(); i++) {

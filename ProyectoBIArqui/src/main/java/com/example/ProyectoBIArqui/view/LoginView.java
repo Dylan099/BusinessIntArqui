@@ -11,10 +11,11 @@ import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.material.Material;
 
 @Route("logiin")
-@Theme(value = Material.class)
+@Theme(value = Lumo.class,variant = Lumo.DARK)
 public class LoginView extends VerticalLayout {
 
     public LoginView(){

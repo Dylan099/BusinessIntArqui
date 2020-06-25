@@ -13,6 +13,7 @@ import com.example.ProyectoBIArqui.dto.GraphicConfig;
 import com.example.ProyectoBIArqui.dto.QueryXY;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.*;
+import com.vaadin.flow.component.charts.model.style.SolidColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,7 @@ public class ChartGenerator {
                 configuration.setSubTitle(graphic.getDescription());
                 xAxis = configuration.getxAxis();
                 xAxis.setTickmarkPlacement(TickmarkPlacement.ON);
+
                 ListSeries n = new ListSeries();
                 n.setName("Eje Y");
                 List<String> s1 = null;
@@ -163,6 +165,8 @@ public class ChartGenerator {
 
                 plotOptionsArea = new PlotOptionsArea();
                 plotOptionsArea.setStacking(Stacking.NORMAL);
+                plotOptionsArea.setColorIndex(581682);
+
                 configuration.setPlotOptions(plotOptionsArea);
                 configuration.addSeries(n);
 

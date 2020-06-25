@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .defaultSuccessUrl("/", true);
         http.csrf().disable();
         http.logout().logoutSuccessUrl("/login");
+
     }
 
     @Bean

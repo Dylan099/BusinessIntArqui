@@ -10,15 +10,23 @@ import com.example.ProyectoBIArqui.domain.GraphicDashboard;
 import com.example.ProyectoBIArqui.domain.Userbi;
 import com.example.ProyectoBIArqui.dto.DashboardDto;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.material.Material;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -30,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route("dashboards")
-@Theme(value = Material.class)
+@Theme(value = Lumo.class,variant = Lumo.DARK)
 public class DashboardsView extends VerticalLayout {
 
     GraphicController graphicController;
@@ -54,14 +62,29 @@ public class DashboardsView extends VerticalLayout {
         add(grid);
 
     }
-
     private MenuBar crearMenu() {
+        Label graficasLabel = new Label();
+        graficasLabel.add(new Icon(VaadinIcon.CHART_LINE));
+        graficasLabel.add(new Text("Graficas"));
+
+
+        Label dashboardsLabel = new Label();
+        dashboardsLabel.add(new Icon(VaadinIcon.DASHBOARD));
+        dashboardsLabel.add(new Text("Dashboards"));
+
+
+        Button signOutButton = new Button("Sign Out", new Icon(VaadinIcon.SIGN_OUT));
+        signOutButton.setIconAfterText(true);
+        signOutButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        setHorizontalComponentAlignment(Alignment.END ,signOutButton);
+
+
         MenuBar menuBar = new MenuBar();
         menuBar.setOpenOnHover(true);
 
-        MenuItem graficas = menuBar.addItem("Graficas");
-        MenuItem dashboards = menuBar.addItem("Dashboards");
-        MenuItem signOut = menuBar.addItem("Sign Out");
+        MenuItem graficas = menuBar.addItem(graficasLabel);
+        MenuItem dashboards = menuBar.addItem(dashboardsLabel);
+        MenuItem signOut = menuBar.addItem(signOutButton);
 
         graficas.getSubMenu().addItem(new RouterLink("Crear", GraphicNewView.class));
         graficas.getSubMenu().addItem(new RouterLink("Mostrar", GraphicsView.class));
@@ -77,6 +100,9 @@ public class DashboardsView extends VerticalLayout {
                 ex.printStackTrace();
             }
         });
+
+        menuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY , MenuBarVariant.LUMO_ICON , MenuBarVariant.LUMO_LARGE);
+
         return menuBar;
     }
 
@@ -120,6 +146,13 @@ public class DashboardsView extends VerticalLayout {
             dashboardDtoList.add(new DashboardDto(d.getIdDashboard(),d.getName(),d.getDescription()));
         }
         grid.setItems(dashboardDtoList);
+
+        grid.appendHeaderRow();
+        grid.setThemeName(Lumo.DARK);
+        grid.setHeightByRows(true);
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,GridVariant.MATERIAL_COLUMN_DIVIDERS,
+                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+
         return grid;
     }
 

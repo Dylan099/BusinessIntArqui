@@ -136,6 +136,7 @@ public class DashboardsView extends VerticalLayout {
                 Graphic graphic = graphicController.findGraphicByIdGraphic(g.getIdGraphic().getIdGraphic());
                 if(graphic.getIdUserbi().getIdUserbi().equals(userbi.getIdUserbi())){
                     flag = !flag;
+                    break;
                 }
             }
             if(flag)

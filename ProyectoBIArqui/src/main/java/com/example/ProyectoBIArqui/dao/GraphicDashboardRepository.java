@@ -18,4 +18,6 @@ public interface GraphicDashboardRepository extends JpaRepository<GraphicDashboa
     List<Integer> QueryWaso();
     List<GraphicDashboard> findAllByIdDashboard(Dashboard dashboard);
     List<GraphicDashboard> findAllByIdGraphic(Graphic graphic);
+    @Query(value = "SELECT TOP 1 id_graphic_dashboard FROM graphic_dashboard  ORDER BY id_graphic_dashboard DESC;", nativeQuery = true)
+    Integer findLastId();
 }

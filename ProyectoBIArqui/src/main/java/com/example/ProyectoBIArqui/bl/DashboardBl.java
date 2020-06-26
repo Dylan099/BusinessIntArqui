@@ -26,7 +26,7 @@ public class DashboardBl {
     public void saveDasboard(DashboardConfig dashboardConfig)
     {
         Dashboard dashboard = new Dashboard();
-        int id_dash = dashboardRepository.findAll().size()+1;
+        int id_dash = dashboardRepository.findLastId()+1;
         dashboard.setIdDashboard(id_dash);
         dashboard.setDescription(dashboardConfig.getDesc());
         dashboard.setName(dashboardConfig.getName());
@@ -37,7 +37,7 @@ public class DashboardBl {
         for (Graphic g:dashboardConfig.getGraphicList()
              ) {
             GraphicDashboard graphicDashboard = new GraphicDashboard();
-            graphicDashboard.setIdGraphicDashboard(graphicDashboardRepository.findAll().size()+1);
+            graphicDashboard.setIdGraphicDashboard(graphicDashboardRepository.findLastId()+1);
             graphicDashboard.setIdGraphic(g);
             graphicDashboard.setIdDashboard(dashboard);
             graphicDashboard.setTxDate(new Date());

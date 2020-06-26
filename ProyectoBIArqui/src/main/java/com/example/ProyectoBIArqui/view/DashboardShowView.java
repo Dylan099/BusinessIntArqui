@@ -134,6 +134,7 @@ public class DashboardShowView extends VerticalLayout implements HasUrlParameter
              ) {
             Graphic graphic = graphicController.findGraphicByIdGraphic(gd.getIdGraphic().getIdGraphic());
             chartGenerator.setGraphic(graphic);
+            child.add(new H2());
             child.add(chartGenerator.GenerarGrafica());
             board.addRow(child);
         }

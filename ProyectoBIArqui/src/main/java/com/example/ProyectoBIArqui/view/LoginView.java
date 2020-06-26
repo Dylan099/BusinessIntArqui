@@ -9,17 +9,42 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.material.Material;
 
-@Route("logiin")
-@Theme(value = Lumo.class,variant = Lumo.DARK)
-public class LoginView extends VerticalLayout {
+import java.util.Collections;
 
+@Route("login")
+@Theme(value = Lumo.class,variant = Lumo.DARK)
+@PageTitle("Login Sistema de Bussiness Inteligence Covid-19 Bolivia")
+public class LoginView extends VerticalLayout implements BeforeEnterObserver {
+
+    LoginForm login = new LoginForm();
     public LoginView(){
 
+        addClassName("login-view");
+        setSizeFull();
+
+        setJustifyContentMode(JustifyContentMode.CENTER);
+        setAlignItems(Alignment.CENTER);
+
+        login.setAction("login");
+        login.setForgotPasswordButtonVisible(false);
+
+        Icon icon = VaadinIcon.AMBULANCE.create();
+        icon.setSize("50px");
+        icon.getStyle().set("top", "-4px");
+        H1 title = new H1();
+        title.add(icon);
+        title.add(new Text("Covid-19 Bolivia"));
+
+        add(title);
+        add(login);
         Button registration = new Button("Registration");
         registration.addClickListener(e -> {
             H2 message = new H2();
@@ -29,13 +54,6 @@ public class LoginView extends VerticalLayout {
 
         LoginForm component = new LoginForm();
         component.setForgotPasswordButtonVisible(false);
-
-        Icon icon = VaadinIcon.AMBULANCE.create();
-        icon.setSize("50px");
-        icon.getStyle().set("top", "-4px");
-        H1 title = new H1();
-        title.add(icon);
-        title.add(new Text("Covid-19 Bolivia"));
 
         component.addLoginListener(e -> {
             boolean isAuthenticated = false;//authenticate(e);
@@ -53,9 +71,14 @@ public class LoginView extends VerticalLayout {
         setHorizontalComponentAlignment(Alignment.CENTER,title);
         setHorizontalComponentAlignment(Alignment.CENTER,component);
 
-        add(registration);
-        add(title);
-        add(component);
     }
 
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        if(!beforeEnterEvent.getLocation()
+        .getQueryParameters().getParameters().getOrDefault("error", Collections.emptyList())
+        .isEmpty()){
+            login.setError(true);
+        }
+    }
 }

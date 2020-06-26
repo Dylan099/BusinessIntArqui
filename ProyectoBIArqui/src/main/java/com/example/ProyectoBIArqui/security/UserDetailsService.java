@@ -1,11 +1,10 @@
-package com.example.ProyectoBIArqui.bl;
+package com.example.ProyectoBIArqui.security;
 
 import com.example.ProyectoBIArqui.dao.UserRepository;
 import com.example.ProyectoBIArqui.domain.Userbi;
-import com.example.ProyectoBIArqui.dto.UserPrincipal;
+import com.example.ProyectoBIArqui.security.UserPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 

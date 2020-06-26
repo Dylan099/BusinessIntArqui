@@ -1,11 +1,9 @@
-package com.example.ProyectoBIArqui.dto;
+package com.example.ProyectoBIArqui.security;
 
-import com.example.ProyectoBIArqui.bl.UserDetailsService;
 import com.example.ProyectoBIArqui.domain.Userbi;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -49,7 +49,7 @@ public class GraphicBl {
     public void saveGraphic(GraphicConfig graphicConfig)
     {
         Graphic graphic = new Graphic();
-        graphic.setIdGraphic(graphicRepository.findAll().size()+1);
+        graphic.setIdGraphic(graphicRepository.findLastId()+1);
         graphic.setName(graphicConfig.getTitulo());
         graphic.setDescription(graphicConfig.getDesc());
         graphic.setIdQuerybi(queryRepository.findQuerybiByQuery(graphicConfig.getQuery()));

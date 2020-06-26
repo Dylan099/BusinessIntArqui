@@ -15,10 +15,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.contextmenu.MenuItem;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.listbox.MultiSelectListBox;
@@ -80,11 +77,12 @@ public class DashboardNewView extends VerticalLayout {
 
         Button save = new Button("Guardar");
         save.addClickListener(e -> {
-            Set<String> n = checkboxGroupGrapgics.getSelectedItems();
+            Set<String> n = checkboxGroupGrapgics.getValue();
             List<Graphic> graphics = new ArrayList<>();
             for (String s:n
                  ) {
-                graphics.add(graphicController.findGraphicByName(s));
+                System.out.println("AUXILIO "+s.trim() + graphicController.findGraphicByName("Nuevo Test").getIdGraphic());
+                graphics.add(graphicController.findGraphicByName(s.trim()));
             }
             DashboardConfig dashboardConfig = new DashboardConfig();
             dashboardConfig.setName(title.getValue());
@@ -95,14 +93,18 @@ public class DashboardNewView extends VerticalLayout {
                     ui.navigate("dashboards"));
         });
 
+        H4 graphs = new H4("Seleccione las graficas que desea añadir");
+
         setHorizontalComponentAlignment(Alignment.CENTER,titleClass);
         setHorizontalComponentAlignment(Alignment.CENTER,title);
         setHorizontalComponentAlignment(Alignment.CENTER,checkboxGroupGrapgics);
         setHorizontalComponentAlignment(Alignment.CENTER,description);
         setHorizontalComponentAlignment(Alignment.CENTER,save);
+        setHorizontalComponentAlignment(Alignment.CENTER,graphs);
 
         add(titleClass);
         add(title);
+        add(graphs);
         add(checkboxGroupGrapgics);
         add(description);
         add(save);
